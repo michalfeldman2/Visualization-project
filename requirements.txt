@@ -1,6 +1,6 @@
 pandas
 streamlit
-plotly.graph_objects
+plotly
 numpy
 plotly.express
 numerize

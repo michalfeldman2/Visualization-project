@@ -174,9 +174,8 @@ def create_interval_graph(df):
     st.plotly_chart(fig)
     print()
     # Create a box plot based on the selected group
-    selected_group = avg_interval[name].unique()[0]
-    st.markdown(f"#### Comparison of profiles with {selected_group} {name} between Genuine and Fake Profiles ")
     selected_group = st.selectbox("Select Group", avg_interval[name].unique())
+    st.markdown(f"#### Comparison of profiles with {selected_group} {name} between Genuine and Fake Profiles ")
     fig_box = go.Figure()
     fake_users = df[(df[name] == selected_group) & (df['class'] == 'f')]
     real_users = df[(df[name] == selected_group) & (df['class'] == 'r')]

@@ -171,9 +171,8 @@ def create_interval_graph(df):
         yaxis_title='Average interval between posts (days)'
     )
     st.plotly_chart(fig)
-    print()
     # Create a box plot based on the selected group
-    selected_group = st.selectbox("Select group", avg_interval[name].unique())
+    selected_group = st.selectbox("Select gslideroup", avg_interval[name].unique())
     columns = ['followers', 'following', 'profile picture', 'bio length','average hashtag count']
     col_box = st.radio("Select parameter", columns)
     st.markdown(f"#### Comparison of profiles with {selected_group} {col_box} between Genuine and Fake Profiles ")

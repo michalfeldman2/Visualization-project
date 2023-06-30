@@ -42,12 +42,11 @@ def create_bar_plot():
     fig = go.Figure()
     categories = ['Fake profiles', 'Genuine profiles']
     x = options_columns
-    bar_width = 0.4
 
     for i, category in enumerate(categories):
         values = []
         for param in options_columns:
-            if category == 'Fake Profiles':
+            if category == 'Fake profiles':
                 value = (fake_profiles[param].sum() / len(fake_profiles))
             else:
                 value = (genuine_profiles[param].sum() / len(genuine_profiles))

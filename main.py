@@ -132,12 +132,12 @@ def create_scatter():
 def create_interval_graph(df):
     options_columns = ['following', 'followers']
 
-    x_axis_param = options_columns[0]
+    x_axis_param = st.radio("Select X-Axis Parameter", options_columns)
     groups = []
     if x_axis_param == 'followers':
         name = 'Follower Groups'
         st.markdown(f"### Average Interval Between Posts by {name}")
-        x_axis_param = st.radio("Select X-Axis Parameter", options_columns)
+
         for i in range(0, 4000, 500):
             groups.append((i, i + 500))
         df[name] = pd.cut(df['followers'], bins=[group[0] for group in groups] + [float('inf')],
@@ -145,7 +145,6 @@ def create_interval_graph(df):
     else:
         name = 'Following Groups'
         st.markdown(f"### Average Interval Between Posts by {name}")
-        x_axis_param = st.radio("Select X-Axis Parameter", options_columns)
         for i in range(0, 9000, 500):
             groups.append((i, i + 500))
         df[name] = pd.cut(df['following'], bins=[group[0] for group in groups] + [float('inf')],
@@ -175,12 +174,12 @@ def create_interval_graph(df):
     print()
     # Create a box plot based on the selected group
     selected_group = st.selectbox("Select Group", avg_interval[name].unique())
-    st.markdown(f"#### Comparison of profiles with {selected_group} {name} between Genuine and Fake Profiles ")
+    columns = ['followers', 'following', 'profile picture', 'bio length','average hashtag count']
+    col_box = st.radio("Select Parameter", columns)
+    st.markdown(f"#### Comparison of profiles with {selected_group} {col_box} between Genuine and Fake Profiles ")
     fig_box = go.Figure()
     fake_users = df[(df[name] == selected_group) & (df['class'] == 'f')]
     real_users = df[(df[name] == selected_group) & (df['class'] == 'r')]
-    columns = ['followers', 'following', 'profile picture', 'bio length','average hashtag count']
-    col_box = st.radio("Select Parameter", columns)
     fig_box.add_trace(go.Box(y=fake_users[col_box], name='Fake Users'))
     fig_box.add_trace(go.Box(y=real_users[col_box], name='Real Users'))
 
@@ -189,39 +188,6 @@ def create_interval_graph(df):
     fig_box.update_layout(xaxis=dict(title='User Type'), yaxis=dict(title=f'{col_box}'), showlegend=True)
     st.plotly_chart(fig_box)
 
-
-# 'pos': 'posts', 'pic': 'profile picture', 'flg': 'following', 'flw': 'followers', 'bl': 'bio length',
-#                'lin': 'link',
-#                'cl': 'avg caption length', 'ni': 'non_img_perc', 'lt': 'location_tag_perc',
-
-def create_corr(df):
-    selected_columns = ['followers', 'following', 'profile picture', 'bio length','location_tag_perc','avg caption length']
-    selected_data = df[selected_columns]
-    correlation_matrix = selected_data.corr()
-    np.fill_diagonal(correlation_matrix.values, np.nan)
-
-    fig = px.imshow(
-        correlation_matrix,
-        color_continuous_scale='Blues',
-        title='Correlation Matrix',
-        labels=dict(x='Features', y='Features')
-    )
-
-    fig.data[0].update(z=np.where(np.eye(len(correlation_matrix)), np.nan, correlation_matrix))
-
-    # Customize hover template for diagonal cells
-    fig.update_traces(hovertemplate=np.where(np.eye(len(correlation_matrix)), '', '<b>Correlation:</b> %{z:.2f}'))
-    fig.update_traces(text=correlation_matrix.round(2))
-    # Configure the colorbar
-    fig.update_layout(
-        coloraxis=dict(
-            colorbar=dict(title='Correlation'),
-            cmin=0,
-            cmax=1
-        )
-    )
-    # Display the correlation matrix with Streamlit
-    st.plotly_chart(fig)
 
 
 def main():

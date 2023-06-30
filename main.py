@@ -38,9 +38,9 @@ def start_info():
 
 def create_bar_plot():
     options_columns = ['posts', 'following', 'followers']
-    st.markdown("### Comparison of Profile Features between Fake and Real Users")
+    st.markdown("### Comparison of profile features between fake and genuine users")
     fig = go.Figure()
-    categories = ['Fake Profiles', 'Genuine Profiles']
+    categories = ['Fake profiles', 'Genuine profiles']
     x = options_columns
     bar_width = 0.4
 
@@ -61,8 +61,8 @@ def create_bar_plot():
         ))
 
     fig.update_layout(
-        xaxis_title='Profile Features',
-        yaxis_title='Average Value',
+        xaxis_title='Profile features',
+        yaxis_title='Average value',
         # title='Comparison of Profile Features between Fake and Real Users',
         width=600,
         height=400
@@ -74,8 +74,8 @@ def create_bar_plot():
 
 
 def create_scatter():
-    options_columns = ['posts', 'followers']
-    st.markdown(f"### Comparison of Followers and Posts between Genuine and Fake Profiles")
+    options_columns = ['following', 'followers']
+    st.markdown(f"### Comparison of followers and following between genuine and fake profiles")
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -122,7 +122,7 @@ def create_scatter():
         yaxis=dict(range=y_axis_range),
         width=1000,
         height=500,
-        xaxis_title='Posts',
+        xaxis_title='following',
         yaxis_title='Followers'
     )
 
@@ -135,16 +135,16 @@ def create_interval_graph(df):
     x_axis_param = st.radio("Select X-Axis Parameter", options_columns)
     groups = []
     if x_axis_param == 'followers':
-        name = 'Follower Groups'
-        st.markdown(f"### Average Interval Between Posts by {name}")
+        name = 'followers groups'
+        st.markdown(f"### Average interval between posts by {name}")
 
-        for i in range(0, 4000, 500):
-            groups.append((i, i + 500))
+        for i in range(0, 100000, 10000):
+            groups.append((i, i + 10000))
         df[name] = pd.cut(df['followers'], bins=[group[0] for group in groups] + [float('inf')],
                           labels=[f"{group[0]}-{group[1]}" for group in groups])
     else:
-        name = 'Following Groups'
-        st.markdown(f"### Average Interval Between Posts by {name}")
+        name = 'following groups'
+        st.markdown(f"### Average interval between posts by {name}")
         for i in range(0, 9000, 500):
             groups.append((i, i + 500))
         df[name] = pd.cut(df['following'], bins=[group[0] for group in groups] + [float('inf')],
@@ -168,14 +168,14 @@ def create_interval_graph(df):
 
     fig.update_layout(
         xaxis_title=f'{name}',
-        yaxis_title='Average Interval Between Posts (days)'
+        yaxis_title='Average interval between posts (days)'
     )
     st.plotly_chart(fig)
     print()
     # Create a box plot based on the selected group
-    selected_group = st.selectbox("Select Group", avg_interval[name].unique())
+    selected_group = st.selectbox("Select group", avg_interval[name].unique())
     columns = ['followers', 'following', 'profile picture', 'bio length','average hashtag count']
-    col_box = st.radio("Select Parameter", columns)
+    col_box = st.radio("Select parameter", columns)
     st.markdown(f"#### Comparison of profiles with {selected_group} {col_box} between Genuine and Fake Profiles ")
     fig_box = go.Figure()
     fake_users = df[(df[name] == selected_group) & (df['class'] == 'f')]

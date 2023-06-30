@@ -2,5 +2,4 @@ pandas
 streamlit
 plotly
 numpy
-plotly.express
 numerize
